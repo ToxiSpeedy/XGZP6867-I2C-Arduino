@@ -1,0 +1,42 @@
+#include <Wire.h>
+
+#define Address 0x6D
+
+byte PressureMSB = 1;
+byte PressureCSB = 2;
+byte PressureLSB = 4;
+byte TempMSB = 8;
+byte TempLSB = 16;
+void setup() {
+  // put your setup code here, to run once:
+  Wire.begin();        // join i2c bus (address optional for master)
+  Serial.begin(9600);  // start Serial for output
+}
+
+void loop()
+{
+  Wire.beginTransmission(Address);
+  Wire.write(0x06);
+  Wire.endTransmission(false);
+
+  Wire.requestFrom(Address, 5);    // request 6 bytes from slave device #2
+  if(Wire.available()){
+  PressureMSB=Wire.read();
+  PressureCSB=Wire.read();
+  PressureLSB=Wire.read();
+  TempMSB=Wire.read();
+  TempLSB=Wire.read();
+  Serial.print(PressureMSB, BIN);
+  Serial.print('\n');
+  Serial.print(PressureCSB, BIN);
+  Serial.print('\n');
+  Serial.print(PressureLSB, BIN);
+  Serial.print('\n');
+  Serial.print(TempMSB, BIN);
+  Serial.print('\n');
+  Serial.print(TempLSB, BIN);
+  Serial.print('\n');
+  } else
+  Serial.println("UFckdUp");
+  delay(500);
+}
